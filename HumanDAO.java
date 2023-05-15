@@ -22,6 +22,10 @@ public class HumanDAO {
 		while(true) {
 			try {
 				int selectNum=Integer.parseInt(sc.nextLine());
+				if(selectNum<0) {
+					System.out.println("다시입력해주세요");
+					continue;
+				}
 				return selectNum;
 			}catch (Exception e) {
 				System.out.println("숫자를 입력해주세요");
@@ -97,25 +101,66 @@ public class HumanDAO {
 		daoS.displayList();
 		System.out.println("구매할 제품의 코드번호를 입력해주세요");
 		int select=selectNum();
+		int rs0=0;
+		int rs1=0;
+		int rs2=0;
+		
 		try {
-			ps=conn.prepareStatement("UPDATE CONVENIENCE SET cnt=cnt-1 where code=?" );
+			ps=conn.prepareStatement("SELECT cnt from convenience where code=?" );
 			ps.setInt(1, select);
-			ps.executeUpdate();
-			ps=conn.prepareStatement("SELECT product from convenience" );
 			rs=ps.executeQuery();
 			if(rs.next()) {
-			System.out.print(rs.getString("product"));
-			System.out.println("를 구입하셧습니다!");
+				rs0=rs.getInt("cnt");
 			}
-			ps = conn.prepareStatement("UPDATE human SET money = money-(select convenience.price from convenience where code=?) where name='김기곤'");
+			
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
+		if(rs0==0) {
+			System.out.println("재고가 다 떨어졌습니다");
+			return;
+		}
+		
+		try {
+			ps=conn.prepareStatement("SELECT price from convenience where code=?" );
 			ps.setInt(1, select);
-			ps.executeUpdate();
-			ps=conn.prepareStatement("SELECT money from human" );
 			rs=ps.executeQuery();
 			if(rs.next()) {
-			System.out.print("현재금액 : ");
-			System.out.println(rs.getInt("money"));
+				rs1=rs.getInt("price");
 			}
+			
+			ps=conn.prepareStatement("SELECT money from human where name='김기곤'" );
+			rs=ps.executeQuery();
+			if(rs.next()) {
+				rs2=rs.getInt("money");
+			}
+			
+			if(rs2>=rs1) {
+				ps=conn.prepareStatement("UPDATE CONVENIENCE SET cnt=cnt-1 where code=?" );
+				ps.setInt(1, select);
+				ps.executeUpdate();
+				ps=conn.prepareStatement("SELECT product from convenience where code=?" );
+				ps.setInt(1, select);
+				rs=ps.executeQuery();
+				if(rs.next()) {
+				System.out.print(rs.getString("product"));
+				System.out.println("를 구입하셧습니다!");
+				}
+				ps = conn.prepareStatement("UPDATE human SET money = money-(select convenience.price from convenience where code=?) where name='김기곤'");
+				ps.setInt(1, select);
+				ps.executeUpdate();
+				ps=conn.prepareStatement("SELECT money from human" );
+				rs=ps.executeQuery();
+				if(rs.next()) {
+				System.out.print("현재금액 : ");
+				System.out.println(rs.getInt("money"));
+				}
+			}
+			else if(rs1>rs2) {
+				System.out.println("잔액이 부족합니다");
+			}
+			
 		} catch (SQLException e) {
 			
 			e.printStackTrace();

@@ -19,6 +19,10 @@ public class StoreDAO {
 		while(true) {
 			try {
 				int selectNum=Integer.parseInt(sc.nextLine());
+				if(selectNum<0) {
+					System.out.println("다시입력해주세요");
+					continue;
+				}
 				return selectNum;
 			}catch (Exception e) {
 				System.out.println("숫자를 입력해주세요");
