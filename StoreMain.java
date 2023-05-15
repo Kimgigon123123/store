@@ -12,7 +12,7 @@ public class StoreMain {
 			System.out.println("4.물품삭제");
 			System.out.println("0.종료");
 			System.out.println("=======================");
-			int selectNum = dao.slectNum();
+			int selectNum = dao.selectNum();
 			if(selectNum==1) {
 				dao.displayList();
 			}

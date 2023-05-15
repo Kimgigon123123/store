@@ -15,7 +15,7 @@ public class StoreDAO {
 	ResultSet rs;
 	
 	
-	public int slectNum() {
+	public int selectNum() {
 		while(true) {
 			try {
 				int selectNum=Integer.parseInt(sc.nextLine());
@@ -99,6 +99,7 @@ public class StoreDAO {
 	public void addList() {
 		
 		try {
+			displayList();
 			System.out.println("제품의 이름을 입력해주세요");
 			String product = sc.nextLine();
 			System.out.println("제품의 가격을 입력해주세요");
@@ -127,13 +128,13 @@ public class StoreDAO {
 	public void updateList() {
 		
 		try {
-			
+			displayList();
 			System.out.println("제품의 코드번호를 입력해주세요");
-			int code = Integer.parseInt(sc.nextLine());
+			int code = selectNum();
 			System.out.println("제품의 가격을 입력해주세요");
-			int price = Integer.parseInt(sc.nextLine());
+			int price = selectNum();
 			System.out.println("제품의 수량을 입력해주세요");
-			int cnt = Integer.parseInt(sc.nextLine());
+			int cnt = selectNum();
 			conn = DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521:xe", "hanul", "0000");
 			ps=conn.prepareStatement("UPDATE CONVENIENCE SET price=?,cnt=? where code=?" );
 			ps.setInt(1, price);
@@ -156,8 +157,9 @@ public class StoreDAO {
 	
 	public void delete() {
 		
-		System.out.println("제품의 코드번호를 입력해주세요");
-		int code = Integer.parseInt(sc.nextLine());
+		displayList();
+		System.out.println("추가할 제품의 코드번호를 입력해주세요");
+		int code = selectNum();
 		
 		try {
 			conn = DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521:xe", "hanul", "0000");
