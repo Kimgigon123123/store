@@ -28,6 +28,9 @@ public class StoreMain {
 			else if(selectNum==0) {
 				break;
 			}
+			else {
+				System.out.println("다시입력해주세요");
+			}
 		}
 		
 	}
