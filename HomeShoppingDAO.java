@@ -48,7 +48,7 @@ public class HomeShoppingDAO {
 	
 	public Connection getConn() {
 		
-		String url = "jdbc:oracle:thin:@127.0.0.1:1521:xe";
+		String url = "jdbc:oracle:thin:@211.223.59.99:1521:xe";
 		
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -84,7 +84,7 @@ public class HomeShoppingDAO {
 			id= sc.nextLine();
 		}
 		try {
-			ps=conn.prepareStatement("SELECT id from member where id=?" );
+			ps=conn.prepareStatement("SELECT id from member2 where id=?" );
 			ps.setString(1, id);
 			rs=ps.executeQuery();
 			if(rs.next()) {
@@ -133,7 +133,7 @@ public class HomeShoppingDAO {
 		}
 		
 		try {
-			ps = conn.prepareStatement("INSERT INTO MEMBER (ID, PW, NAME, BIRTH,cash) "
+			ps = conn.prepareStatement("INSERT INTO member2 (ID, PW, NAME, BIRTH,cash) "
 					+ "VALUES (?, ?, ?, ?,0)");
 			ps.setString(1, id);
 			ps.setString(2, pw);
@@ -141,7 +141,7 @@ public class HomeShoppingDAO {
 			ps.setInt(4, birth);
 			rs = ps.executeQuery();
 			
-			ps=conn.prepareStatement("SELECT name from member where id=?" );
+			ps=conn.prepareStatement("SELECT name from member2 where id=?" );
 			ps.setString(1, id);
 			rs=ps.executeQuery();
 			if(rs.next()) {
@@ -170,7 +170,7 @@ public class HomeShoppingDAO {
 		String pw = sc.nextLine();
 		
 		try {
-			ps=conn.prepareStatement("SELECT id,pw from member where id=? and pw=?" );
+			ps=conn.prepareStatement("SELECT id,pw from member2 where id=? and pw=?" );
 			ps.setString(1, id);
 			ps.setString(2, pw);
 			rs=ps.executeQuery();
@@ -222,7 +222,7 @@ public class HomeShoppingDAO {
 		
 		
 		try {
-			ps = conn.prepareStatement("select name,birth,id from member where name=? and birth=?");
+			ps = conn.prepareStatement("select name,birth,id from member2 where name=? and birth=?");
 			ps.setString(1, name);
 			ps.setInt(2, birth);
 			rs = ps.executeQuery();
@@ -276,7 +276,7 @@ public class HomeShoppingDAO {
 		
 		
 		try {
-			ps = conn.prepareStatement("select id,name,birth,pw from member where id=? and name=? and birth=?");
+			ps = conn.prepareStatement("select id,name,birth,pw from member2 where id=? and name=? and birth=?");
 			ps.setString(1, id);
 			ps.setString(2, name);
 			ps.setInt(3,birth);
@@ -328,9 +328,12 @@ public class HomeShoppingDAO {
 			else if(selectNum==5) {
 				delete();
 			}
-			else {
+			else if(selectNum==0){
 				System.out.println("로그아웃합니다");
 				islogin=false;
+			}
+			else {
+				System.out.println("다시입력해주세요");
 			}
 		}
 	}
@@ -370,7 +373,7 @@ public class HomeShoppingDAO {
 				rs1=rs.getInt("price");
 			}
 			
-			ps=conn.prepareStatement("SELECT cash from member where id=?" );
+			ps=conn.prepareStatement("SELECT cash from member2 where id=?" );
 			ps.setString(1, user_id);
 			rs=ps.executeQuery();
 			if(rs.next()) {
@@ -388,11 +391,11 @@ public class HomeShoppingDAO {
 				System.out.print(rs.getString("product"));
 				System.out.println("를 구입하셧습니다!");
 				}
-				ps = conn.prepareStatement("UPDATE member SET cash = cash-(select convenience.price from convenience where code=?) where id=?");
+				ps = conn.prepareStatement("UPDATE member2 SET cash = cash-(select convenience.price from convenience where code=?) where id=?");
 				ps.setInt(1, code);
 				ps.setString(2, user_id);
 				ps.executeUpdate();
-				ps=conn.prepareStatement("SELECT cash from member where id=?" );
+				ps=conn.prepareStatement("SELECT cash from member2 where id=?" );
 				ps.setString(1, user_id);
 				rs=ps.executeQuery();
 				if(rs.next()) {
@@ -417,7 +420,7 @@ public class HomeShoppingDAO {
 	void displayMoney() {
 		getConn();
 		try {
-			ps = conn.prepareStatement("select cash from member where id=?");
+			ps = conn.prepareStatement("select cash from member2 where id=?");
 			ps.setString(1, user_id);
 			rs = ps.executeQuery();
 			if(rs.next()) {
@@ -438,7 +441,7 @@ public class HomeShoppingDAO {
 		int chargeCash=selectNum();
 		try {
 			getConn();
-			ps = conn.prepareStatement("UPDATE member SET cash=cash+? where id=?");
+			ps = conn.prepareStatement("UPDATE member2 SET cash=cash+? where id=?");
 			ps.setInt(1, chargeCash);
 			ps.setString(2, user_id);
 			ps.executeUpdate();
@@ -466,7 +469,7 @@ public class HomeShoppingDAO {
 		
 		
 		try {
-			ps=conn.prepareStatement("UPDATE member SET pw=? where id=?" );
+			ps=conn.prepareStatement("UPDATE member2 SET pw=? where id=?" );
 			ps.setString(1, pw);
 			ps.setString(2, user_id);
 			ps.executeUpdate();
@@ -495,10 +498,11 @@ public class HomeShoppingDAO {
 		if(select==2) {
 			try {
 				getConn();
-				ps=conn.prepareStatement("delete FROM member where id=?" );
+				ps=conn.prepareStatement("delete FROM member2 where id=?" );
 				ps.setString(1,user_id);
 				ps.executeUpdate();
 				System.out.println("탈퇴되었습니다.");
+				islogin=false;
 			
 			} catch (SQLException e) {
 				

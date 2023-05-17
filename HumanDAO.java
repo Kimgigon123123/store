@@ -35,7 +35,7 @@ public class HumanDAO {
 	
 	public Connection getConn() {
 		
-		String url = "jdbc:oracle:thin:@127.0.0.1:1521:xe";
+		String url = "jdbc:oracle:thin:@211.223.59.99:1521:xe";
 		
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");

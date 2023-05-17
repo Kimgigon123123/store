@@ -46,7 +46,7 @@ public class StoreDAO {
 		String id=sc.nextLine();
 		System.out.print("비밀번호:");
 		String pw=sc.nextLine();
-		String url = "jdbc:oracle:thin:@127.0.0.1:1521:xe";
+		String url = "jdbc:oracle:thin:@211.223.59.99:1521:xe";
 		
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -73,7 +73,7 @@ public class StoreDAO {
 	public void displayList() {
 		
 		try {
-			conn = DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521:xe", "hanul", "0000");
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@211.223.59.99:1521:xe", "hanul", "0000");
 			ps=conn.prepareStatement("select * from CONVENIENCE ORDER BY code");
 			rs=ps.executeQuery();
 			System.out.println("코드번호   상품명    가격   수량");
@@ -106,7 +106,7 @@ public class StoreDAO {
 			int price = Integer.parseInt(sc.nextLine());
 			System.out.println("제품의 수량을 입력해주세요");
 			int cnt = Integer.parseInt(sc.nextLine());
-			conn = DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521:xe", "hanul", "0000");
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@211.223.59.99:1521:xe", "hanul", "0000");
 			ps=conn.prepareStatement("INSERT INTO CONVENIENCE (CODE, PRODUCT, PRICE, CNT)VALUES ((SELECT NVL(MAX(code), 0) + 1 FROM convenience),?,?,?)");
 			ps.setString(1, product);
 			ps.setInt(2, price);
@@ -135,7 +135,7 @@ public class StoreDAO {
 			int price = selectNum();
 			System.out.println("제품의 수량을 입력해주세요");
 			int cnt = selectNum();
-			conn = DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521:xe", "hanul", "0000");
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@211.223.59.99:1521:xe", "hanul", "0000");
 			ps=conn.prepareStatement("UPDATE CONVENIENCE SET price=?,cnt=? where code=?" );
 			ps.setInt(1, price);
 			ps.setInt(2, cnt);
@@ -162,7 +162,7 @@ public class StoreDAO {
 		int code = selectNum();
 		
 		try {
-			conn = DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521:xe", "hanul", "0000");
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@211.223.59.99:1521:xe", "hanul", "0000");
 			ps=conn.prepareStatement("delete FROM CONVENIENCE where code=?" );
 			ps.setInt(1, code);
 			ps.executeUpdate();
